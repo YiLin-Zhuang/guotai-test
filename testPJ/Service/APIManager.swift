@@ -54,19 +54,32 @@ class APIManager {
         return downloadedData
     }
 
-    // MARK: - Download images and convert to UIImage
     func downloadImages(urls: [URL]) async -> [UIImage] {
-        var images: [UIImage] = []
-        for url in urls {
-            do {
-                let (data, _) = try await session.data(from: url)
-                if let image = UIImage(data: data) {
+        await withTaskGroup(of: UIImage?.self, body: { group in
+            var images: [UIImage] = []
+
+            for url in urls {
+                group.addTask {
+                    return await self.downloadImage(url: url)
+                }
+            }
+
+            for await result in group {
+                if let image = result {
                     images.append(image)
                 }
-            } catch {
-                continue
             }
+
+            return images
+        })
+    }
+
+    private func downloadImage(url: URL) async -> UIImage? {
+        do {
+            let (data, _) = try await session.data(from: url)
+            return UIImage(data: data)
+        } catch {
+            return nil
         }
-        return images
     }
 }

@@ -45,6 +45,7 @@ class HomeViewController: UIViewController {
         pageControl.pageIndicatorTintColor = UIColor(white: 136.0 / 255.0, alpha: 1.0)
         pageControl.numberOfPages = viewModel.data?.adBanner.count ?? 0
         pageControl.currentPage = 0
+        pageControl.isUserInteractionEnabled = false
         return pageControl
     }()
     
@@ -218,17 +219,17 @@ class HomeViewController: UIViewController {
     }
     
     fileprivate func reloadImage(){
-        var leftIndex = 0
-        var rightIndex = 0
-        guard let adBanners = viewModel.data?.adBanner else { return }
-        currentIndex = currentIndex % adBanners.count
-        adbannerView.setContentOffset(CGPoint(x: adView.bounds.width, y: 0), animated: false)
-        pageControl.currentPage = (currentIndex - 1 + adBanners.count) % adBanners.count
-        leftIndex = (currentIndex - 1 + adBanners.count) % adBanners.count
-        rightIndex = (currentIndex + 1) % adBanners.count
-        rightImageView.image = adBanners[rightIndex]
-        currentImageView.image = adBanners[currentIndex]
-        leftImageView.image = adBanners[leftIndex]
+         var leftIndex = 0
+         var rightIndex = 0
+         guard let adBanners = viewModel.data?.adBanner else { return }
+         currentIndex = currentIndex % adBanners.count
+         adbannerView.setContentOffset(CGPoint(x: adView.bounds.width, y: 0), animated: false)
+         pageControl.currentPage = (currentIndex - 1 + adBanners.count) % adBanners.count
+         leftIndex = (currentIndex - 1 + adBanners.count) % adBanners.count
+         rightIndex = (currentIndex + 1) % adBanners.count
+         rightImageView.image = adBanners[rightIndex]
+         currentImageView.image = adBanners[currentIndex]
+         leftImageView.image = adBanners[leftIndex]
         
     }
     
